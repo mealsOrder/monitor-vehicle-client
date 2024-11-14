@@ -2,32 +2,28 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
 #include <QImage>
-#include <QThread>
-#include <QPushButton>  // QPushButton 헤더 추가
-#include <QHBoxLayout>  // QHBoxLayout 헤더 추가
 #include "video_thread.h"  // VideoThread 클래스 헤더
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
-    void updateFrame(const QImage &frame);  // 프레임을 업데이트하는 슬롯
+    void updateFrame(const QImage &frame);
 
 private:
     Ui::MainWindow *ui;
-    VideoThread *videoThread;  // VideoThread 객체
-    QLabel *videoLabel;        // 비디오를 표시할 QLabel
-    QPushButton *dummyButton;  // 기능 없는 버튼 추가
+    VideoThread *videoThread;
 };
+
 #endif // MAINWINDOW_H
+
