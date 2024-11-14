@@ -26,6 +26,8 @@ void VideoThread::run()
             break;
         }
 
+        cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+
         // 프레임을 QImage로 변환하여 메인 윈도우에 전달
         QImage qimg(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
         emit frameCaptured(qimg);
