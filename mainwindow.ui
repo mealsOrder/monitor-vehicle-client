@@ -18,12 +18,30 @@
     <string notr="true">Background: rgb(34, 40, 49)</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>4</number>
+    </property>
+    <property name="topMargin">
+     <number>4</number>
+    </property>
+    <property name="rightMargin">
+     <number>4</number>
+    </property>
+    <property name="bottomMargin">
+     <number>4</number>
+    </property>
+    <property name="horizontalSpacing">
+     <number>4</number>
+    </property>
+    <property name="verticalSpacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0" colspan="2">
      <widget class="QFrame" name="frame_3">
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>75</height>
+        <height>50</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -35,14 +53,20 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
         <widget class="QLabel" name="label">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="image.qrc">:/images/Adventure-Time-Logo.png</pixmap>
+          <pixmap resource="image.qrc">:/images/h_modi3.png</pixmap>
          </property>
         </widget>
        </item>
@@ -73,7 +97,7 @@
       <property name="maximumSize">
        <size>
         <width>800</width>
-        <height>16777215</height>
+        <height>60</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -85,156 +109,157 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">Background: rgb(249, 247, 247)</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="image.qrc">
-             <normaloff>:/images/free-icon-font-chart-histogram-5528038.png</normaloff>:/images/free-icon-font-chart-histogram-5528038.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">Background: rgb(238, 238, 238)</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="image.qrc">
-             <normaloff>:/images/free-icon-font-running-6627966.png</normaloff>:/images/free-icon-font-running-6627966.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_3">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">Background: rgb(238, 238, 238)</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>images/free-icon-font-browser-3914415.png</normaloff>images/free-icon-font-browser-3914415.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_4">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">Background: rgb(238, 238, 238)</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>images/free-icon-font-eye-3917112.png</normaloff>images/free-icon-font-eye-3917112.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_5">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">Background: rgb(238, 238, 238)</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>images/free-icon-font-portrait-3917494.png</normaloff>images/free-icon-font-portrait-3917494.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>1000</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        <widget class="QPushButton" name="pushButton_5">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>images/free-icon-font-portrait-3917494.png</normaloff>images/free-icon-font-portrait-3917494.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>images/free-icon-font-eye-3917112.png</normaloff>images/free-icon-font-eye-3917112.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>images/free-icon-font-browser-3914415.png</normaloff>images/free-icon-font-browser-3914415.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="image.qrc">
+           <normaloff>:/images/free-icon-font-chart-histogram-5528038.png</normaloff>:/images/free-icon-font-chart-histogram-5528038.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="image.qrc">
+           <normaloff>:/images/free-icon-font-running-6627966.png</normaloff>:/images/free-icon-font-running-6627966.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>1000</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -267,6 +292,10 @@
              <height>40</height>
             </size>
            </property>
+           <property name="styleSheet">
+            <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -296,12 +325,49 @@
              <height>40</height>
             </size>
            </property>
+           <property name="styleSheet">
+            <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="icon">
             <iconset resource="image.qrc">
              <normaloff>:/images/free-icon-font-stop-3917629.png</normaloff>:/images/free-icon-font-stop-3917629.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_8">
+           <property name="minimumSize">
+            <size>
+             <width>40</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>40</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">Background: rgb(238, 238, 238);
+border-radius: 10px;</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="image.qrc">
+             <normaloff>:/images/free-icon-font-rotate-right-3917765.png</normaloff>:/images/free-icon-font-rotate-right-3917765.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -328,6 +394,9 @@
        </item>
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
          <widget class="QWidget" name="page"/>
          <widget class="QWidget" name="page_2"/>
         </widget>
