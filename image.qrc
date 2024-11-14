@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/Adventure-Time-Logo.png</file>
         <file>images/free-icon-font-browser-3914415.png</file>
         <file>images/free-icon-font-chart-histogram-5528038.png</file>
         <file>images/free-icon-font-eye-3917112.png</file>
@@ -9,5 +8,7 @@
         <file>images/huntress-wizards-past-v0-f13b3wtzw7qb1.jpg</file>
         <file>images/free-icon-font-stop-3917629.png</file>
         <file>images/free-icon-font-play-3917607.png</file>
+        <file>images/free-icon-font-rotate-right-3917765.png</file>
+        <file>images/h_modi3.png</file>
     </qresource>
 </RCC>
