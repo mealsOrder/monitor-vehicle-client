@@ -14,10 +14,10 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_NO_DEBUG -DQT_CHARTS_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_NO_DEBUG -DQT_CHARTS_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I. -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = hvtech1.0.0
 DISTDIR = /home/pi/ver2/hvtech/.tmp/hvtech1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -L/usr/lib/aarch64-linux-gnu/gstreamer-1.0 -lgstreamer-1.0 -L/usr/lib/aarch64-linux-gnu -lglib-2.0 -L/usr/local/lib -lopencv_gapi -lopencv_stitching -lopencv_aruco -lopencv_barcode -lopencv_bgsegm -lopencv_bioinspired -lopencv_ccalib -lopencv_dnn_objdetect -lopencv_dnn_superres -lopencv_dpm -lopencv_face -lopencv_freetype -lopencv_fuzzy -lopencv_hdf -lopencv_hfs -lopencv_img_hash -lopencv_intensity_transform -lopencv_line_descriptor -lopencv_mcc -lopencv_quality -lopencv_rapid -lopencv_reg -lopencv_rgbd -lopencv_saliency -lopencv_stereo -lopencv_structured_light -lopencv_phase_unwrapping -lopencv_superres -lopencv_optflow -lopencv_surface_matching -lopencv_tracking -lopencv_highgui -lopencv_datasets -lopencv_text -lopencv_plot -lopencv_videostab -lopencv_videoio -lopencv_wechat_qrcode -lopencv_xfeatures2d -lopencv_shape -lopencv_ml -lopencv_ximgproc -lopencv_video -lopencv_xobjdetect -lopencv_objdetect -lopencv_calib3d -lopencv_imgcodecs -lopencv_features2d -lopencv_dnn -lopencv_flann -lopencv_xphoto -lopencv_photo -lopencv_imgproc -lopencv_core /usr/lib/aarch64-linux-gnu/libQt5Charts.so /usr/lib/aarch64-linux-gnu/libQt5Widgets.so /usr/lib/aarch64-linux-gnu/libQt5Gui.so /usr/lib/aarch64-linux-gnu/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) -L/usr/lib/aarch64-linux-gnu/gstreamer-1.0 -lgstreamer-1.0 -L/usr/lib/aarch64-linux-gnu -lglib-2.0 -L/usr/local/lib -lopencv_gapi -lopencv_stitching -lopencv_aruco -lopencv_barcode -lopencv_bgsegm -lopencv_bioinspired -lopencv_ccalib -lopencv_dnn_objdetect -lopencv_dnn_superres -lopencv_dpm -lopencv_face -lopencv_freetype -lopencv_fuzzy -lopencv_hdf -lopencv_hfs -lopencv_img_hash -lopencv_intensity_transform -lopencv_line_descriptor -lopencv_mcc -lopencv_quality -lopencv_rapid -lopencv_reg -lopencv_rgbd -lopencv_saliency -lopencv_stereo -lopencv_structured_light -lopencv_phase_unwrapping -lopencv_superres -lopencv_optflow -lopencv_surface_matching -lopencv_tracking -lopencv_highgui -lopencv_datasets -lopencv_text -lopencv_plot -lopencv_videostab -lopencv_videoio -lopencv_wechat_qrcode -lopencv_xfeatures2d -lopencv_shape -lopencv_ml -lopencv_ximgproc -lopencv_video -lopencv_xobjdetect -lopencv_objdetect -lopencv_calib3d -lopencv_imgcodecs -lopencv_features2d -lopencv_dnn -lopencv_flann -lopencv_xphoto -lopencv_photo -lopencv_imgproc -lopencv_core /usr/lib/aarch64-linux-gnu/libQt5Charts.so /usr/lib/aarch64-linux-gnu/libQt5Widgets.so /usr/lib/aarch64-linux-gnu/libQt5Gui.so /usr/lib/aarch64-linux-gnu/libQt5Network.so /usr/lib/aarch64-linux-gnu/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -54,14 +54,18 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		mainwindow.cpp \
+		networkmanager.cpp \
 		video_thread.cpp qrc_image.cpp \
 		moc_mainwindow.cpp \
+		moc_networkmanager.cpp \
 		moc_video_thread.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		networkmanager.o \
 		video_thread.o \
 		qrc_image.o \
 		moc_mainwindow.o \
+		moc_networkmanager.o \
 		moc_video_thread.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -157,8 +161,10 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		hvtech.pro mainwindow.h \
+		networkmanager.h \
 		video_thread.h main.cpp \
 		mainwindow.cpp \
+		networkmanager.cpp \
 		video_thread.cpp
 QMAKE_TARGET  = hvtech
 DESTDIR       = 
@@ -378,8 +384,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents image.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h video_thread.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp video_thread.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h networkmanager.h video_thread.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp networkmanager.cpp video_thread.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -409,16 +415,24 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_image.cpp
 qrc_image.cpp: image.qrc \
 		/usr/lib/qt5/bin/rcc \
+		images/browser.png \
+		images/rewind.png \
 		images/free-icon-font-eye-3917112.png \
-		images/free-icon-font-chart-histogram-5528038.png \
-		images/huntress-wizards-past-v0-f13b3wtzw7qb1.jpg \
-		images/free-icon-font-stop-3917629.png \
+		images/picture.png \
+		images/play.png \
 		images/free-icon-font-running-6627966.png \
-		images/free-icon-font-browser-3914415.png \
 		images/free-icon-font-portrait-3917494.png \
+		images/h_modi3.png \
+		images/huntress-wizards-past-v0-f13b3wtzw7qb1.jpg \
+		images/free-icon-font-browser-3914415.png \
+		images/free-icon-font-chart-histogram-5528038.png \
+		images/free-icon-font-stop-3917629.png \
+		images/running.png \
+		images/chart.png \
+		images/eye.png \
 		images/free-icon-font-rotate-right-3917765.png \
 		images/free-icon-font-play-3917607.png \
-		images/h_modi3.png
+		images/stop.png
 	/usr/lib/qt5/bin/rcc -name image image.qrc -o qrc_image.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -427,19 +441,25 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_video_thread.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_networkmanager.cpp moc_video_thread.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_video_thread.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_networkmanager.cpp moc_video_thread.cpp
 moc_mainwindow.cpp: mainwindow.h \
 		video_thread.h \
+		networkmanager.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/ver2/hvtech/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/ver2/hvtech -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/aarch64-linux-gnu/12/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/ver2/hvtech/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/ver2/hvtech -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/aarch64-linux-gnu/12/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+
+moc_networkmanager.cpp: networkmanager.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/ver2/hvtech/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/ver2/hvtech -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/aarch64-linux-gnu/12/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include networkmanager.h -o moc_networkmanager.cpp
 
 moc_video_thread.cpp: video_thread.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/ver2/hvtech/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/ver2/hvtech -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/aarch64-linux-gnu/12/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include video_thread.h -o moc_video_thread.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/ver2/hvtech/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/ver2/hvtech -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtCharts -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/aarch64-linux-gnu/12/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include video_thread.h -o moc_video_thread.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -463,13 +483,18 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 main.o: main.cpp mainwindow.h \
-		video_thread.h
+		video_thread.h \
+		networkmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		video_thread.h \
+		networkmanager.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
+
+networkmanager.o: networkmanager.cpp networkmanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o networkmanager.o networkmanager.cpp
 
 video_thread.o: video_thread.cpp video_thread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o video_thread.o video_thread.cpp
@@ -479,6 +504,9 @@ qrc_image.o: qrc_image.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_networkmanager.o: moc_networkmanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_networkmanager.o moc_networkmanager.cpp
 
 moc_video_thread.o: moc_video_thread.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_video_thread.o moc_video_thread.cpp

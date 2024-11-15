@@ -10,5 +10,13 @@
         <file>images/free-icon-font-play-3917607.png</file>
         <file>images/free-icon-font-rotate-right-3917765.png</file>
         <file>images/h_modi3.png</file>
+        <file>images/chart.png</file>
+        <file>images/browser.png</file>
+        <file>images/eye.png</file>
+        <file>images/picture.png</file>
+        <file>images/play.png</file>
+        <file>images/rewind.png</file>
+        <file>images/running.png</file>
+        <file>images/stop.png</file>
     </qresource>
 </RCC>
