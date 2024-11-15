@@ -10,6 +10,11 @@
 #include <QtCharts/QChartView>
 #include <QScrollArea>
 
+#include "networkmanager.h"
+
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+
 QT_CHARTS_USE_NAMESPACE
 
 namespace Ui {
@@ -22,13 +27,25 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
+    void sendStartRequest();
+
     ~MainWindow();
 
 private slots:
+    void onRequestFinished(const QByteArray &response);  // ���� �����͸� ����
+    void onErrorOccurred(const QString &errorString);    // ���� �޽����� ����
+
     void updateFrame(const QImage &frame);
 
     void showChartPage();
     void showImagePage();
+
+    //void sendStartRequest();
+    void sendStopRequest();
+    void sendResumeRequest();
+
+    void sendNetworkRequest(const QUrl &url);
 
 private:
     Ui::MainWindow *ui;
@@ -37,7 +54,9 @@ private:
     QStackedWidget *stackedWidget;
     QChartView *chartView;
     QScrollArea *imageScrollArea;
-};
 
+    NetworkManager *networkManager;
+    QNetworkAccessManager *networkAccessManager;
+};
 #endif // MAINWINDOW_H
 

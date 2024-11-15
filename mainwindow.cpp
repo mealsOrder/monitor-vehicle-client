@@ -11,11 +11,17 @@
 #include <QPixmap>
 #include <QDir>
 
+#include "networkmanager.h"
+#include <QNetworkRequest>
+#include <QUrl>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , videoThread(new VideoThread(this))
+    , networkManager(new NetworkManager(this))
+    , networkAccessManager(new QNetworkAccessManager(this))
 {
     ui->setupUi(this);
 
@@ -68,9 +74,17 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget->addWidget(imageScrollArea);  // �� ��° ������
 
     // ��ư�� ������ ��ȯ ����
-    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::showChartPage);
-    connect(ui->pushButton_5, &QPushButton::clicked, this, &MainWindow::showImagePage);
+    connect(ui->graph_button, &QPushButton::clicked, this, &MainWindow::showChartPage);
+    connect(ui->bestshot_button, &QPushButton::clicked, this, &MainWindow::showImagePage);
+
+    connect(ui->video_start_button, &QPushButton::clicked, this, &MainWindow::sendStartRequest);
+    connect(ui->video_stop_button, &QPushButton::clicked, this, &MainWindow::sendStopRequest);
+    connect(ui->video_resume_button, &QPushButton::clicked, this, &MainWindow::sendResumeRequest);
+
+    connect(networkManager, &NetworkManager::requestFinished, this, &MainWindow::onRequestFinished);
+    connect(networkManager, &NetworkManager::errorOccurred, this, &MainWindow::onErrorOccurred);
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -97,5 +111,46 @@ void MainWindow::showChartPage()
 void MainWindow::showImagePage()
 {
     stackedWidget->setCurrentWidget(imageScrollArea);
+}
+
+void MainWindow::sendStartRequest()
+{
+    QUrl url("http://192.168.10.121:8080/start_stream");  // START ��û URL
+    sendNetworkRequest(url);
+
+    //networkManager->sendGetRequest(url);
+    /*
+    QUrl url("http://192.168.10.121:8080/start_stream");  // START ��û URL
+    networkManager->sendGetRequest(url);  // NetworkManager�� �����Ͽ� GET ��û
+    */
+}
+
+void MainWindow::sendStopRequest()
+{
+    QUrl url("http://192.168.10.121:8080/pause_stream");  // STOP ��û URL
+    sendNetworkRequest(url);
+}
+
+void MainWindow::sendResumeRequest()
+{
+    QUrl url("http://192.168.10.121:8080/rewind_stream");  // RESUME ��û URL
+    sendNetworkRequest(url);
+}
+
+void MainWindow::sendNetworkRequest(const QUrl &url)
+{
+    QNetworkRequest request(url);
+    //networkAccessManager->get(request);  // GET ��û
+    networkManager->sendGetRequest(url);
+}
+
+void MainWindow::onRequestFinished(const QByteArray &response)
+{
+    qDebug() << "Request successful. Response:" << response;
+}
+
+void MainWindow::onErrorOccurred(const QString &errorString)
+{
+    qWarning() << "Error occurred:" << errorString;  // ���� �޽��� ����
 }
 

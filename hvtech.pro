@@ -1,4 +1,4 @@
-QT       += core gui charts
+QT       += core gui charts network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,10 +26,12 @@ LIBS += -L/usr/lib/aarch64-linux-gnu -lglib-2.0
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    networkmanager.cpp \
     video_thread.cpp
 
 HEADERS += \
     mainwindow.h \
+    networkmanager.h \
     video_thread.h
 
 FORMS += \
