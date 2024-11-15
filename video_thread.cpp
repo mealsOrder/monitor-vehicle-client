@@ -8,7 +8,7 @@ void VideoThread::run()
 {
     // GStreamer 파이프라인
     std::string pipeline = "udpsrc port=5004 caps=\"application/x-rtp, payload=96\" ! "
-                           "rtph264depay ! queue ! avdec_h264 ! queue ! "
+                           "rtpjpegdepay ! queue ! jpegdec ! queue ! "
                            "videoconvert ! appsink";
 
     cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
