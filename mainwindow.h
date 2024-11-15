@@ -46,6 +46,7 @@ private slots:
     void sendResumeRequest();
 
     void sendNetworkRequest(const QUrl &url);
+    void sendRewindRequest();
 
 private:
     Ui::MainWindow *ui;
