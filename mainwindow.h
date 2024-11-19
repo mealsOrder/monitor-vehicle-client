@@ -14,6 +14,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QByteArray>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -49,6 +50,13 @@ private slots:
     void sendRewindRequest();
 
     void onExitButtonClicked();
+
+    void onBestshotStartButtonClicked();
+    //void processAndSaveImages(const QByteArray &responseData,const QString& saveDirectory);
+
+    void onBestshotStopButtonClicked();
+    void saveImageToFile(const QByteArray &imageData);
+    void updateImageScrollArea();
 
 private:
     Ui::MainWindow *ui;
