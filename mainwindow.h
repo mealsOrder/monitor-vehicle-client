@@ -48,6 +48,8 @@ private slots:
     void sendNetworkRequest(const QUrl &url);
     void sendRewindRequest();
 
+    void onExitButtonClicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread;

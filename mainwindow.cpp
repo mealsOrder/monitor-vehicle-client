@@ -55,17 +55,37 @@ MainWindow::MainWindow(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(containerWidget);
 
     // ���� �̹��� ���ϵ� �߰� (�����丮 ���� ���� �ʿ�)
-    QString directoryPath = "/home/pi/ver2/hvtech/images";
+    QString directoryPath = QDir::currentPath() + "/images";
     QDir directory(directoryPath);
     QStringList imageFiles = directory.entryList(QStringList() << "*.jpg" << "*.png" << "*.bmp", QDir::Files);
 
     for (const QString &fileName : imageFiles) {
         QString imagePath = directoryPath + "/" + fileName;
+
+        // �̹��� ǥ��
         QLabel *imageLabel = new QLabel();
         QPixmap pixmap(imagePath);
         imageLabel->setPixmap(pixmap.scaled(200, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        layout->addWidget(imageLabel);
+
+        QFileInfo fileInfo(fileName);
+        QString baseName = fileInfo.baseName(); // Ȯ���ڸ� ������ ���� �̸�
+
+        QLabel *nameLabel = new QLabel(baseName);
+        nameLabel->setAlignment(Qt::AlignCenter);
+
+        nameLabel->setStyleSheet("color: white; font-size: 14px;");
+
+        // �̹����� �̸��� ���η� ����
+        QVBoxLayout *imageLayout = new QVBoxLayout();
+        imageLayout->addWidget(imageLabel);
+        imageLayout->addWidget(nameLabel);
+
+        // �����̳� ������ �߰�
+        QWidget *imageContainer = new QWidget();
+        imageContainer->setLayout(imageLayout);
+        layout->addWidget(imageContainer);
     }
+
     containerWidget->setLayout(layout);
     imageScrollArea->setWidget(containerWidget);
 
@@ -83,6 +103,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(networkManager, &NetworkManager::requestFinished, this, &MainWindow::onRequestFinished);
     connect(networkManager, &NetworkManager::errorOccurred, this, &MainWindow::onErrorOccurred);
+
+    connect(ui->exit_button, &QPushButton::clicked, this, &MainWindow::onExitButtonClicked);
 }
 
 
@@ -110,12 +132,15 @@ void MainWindow::showChartPage()
 
 void MainWindow::showImagePage()
 {
+    qDebug() << "Application Directory:" << QCoreApplication::applicationDirPath();
+
     stackedWidget->setCurrentWidget(imageScrollArea);
 }
 
 void MainWindow::sendStartRequest()
 {
     QUrl url("http://192.168.10.121:8080/start_stream");  // START ��û URL
+    qDebug() << "Sending START request to:" << url.toString();
     sendNetworkRequest(url);
 
     //networkManager->sendGetRequest(url);
@@ -128,6 +153,7 @@ void MainWindow::sendStartRequest()
 void MainWindow::sendResumeRequest()
 {
     QUrl url("http://192.168.10.121:8080/resume_stream");  // START ��û URL
+    qDebug() << "Sending RESUME request to:" << url.toString();
     sendNetworkRequest(url);
 
     //networkManager->sendGetRequest(url);
@@ -140,18 +166,21 @@ void MainWindow::sendResumeRequest()
 void MainWindow::sendStopRequest()
 {
     QUrl url("http://192.168.10.121:8080/pause_stream");  // STOP ��û URL
+    qDebug() << "Sending STOP request to:" << url.toString();
     sendNetworkRequest(url);
 }
 
 void MainWindow::sendRewindRequest()
 {
     QUrl url("http://192.168.10.121:8080/rewind_stream");  // RESUME ��û URL
+    qDebug() << "Sending REWIND request to:" << url.toString();
     sendNetworkRequest(url);
 }
 
 void MainWindow::sendNetworkRequest(const QUrl &url)
 {
     QNetworkRequest request(url);
+    qDebug() << "Sending GET request to:" << url.toString();
     //networkAccessManager->get(request);  // GET ��û
     networkManager->sendGetRequest(url);
 }
@@ -166,3 +195,6 @@ void MainWindow::onErrorOccurred(const QString &errorString)
     qWarning() << "Error occurred:" << errorString;  // ���� �޽��� ����
 }
 
+void MainWindow::onExitButtonClicked() {
+    qDebug() << "Exit button clicked.";
+}

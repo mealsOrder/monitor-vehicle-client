@@ -417,6 +417,7 @@ qrc_image.cpp: image.qrc \
 		/usr/lib/qt5/bin/rcc \
 		images/browser.png \
 		images/rewind.png \
+		images/pause.png \
 		images/free-icon-font-eye-3917112.png \
 		images/picture.png \
 		images/play.png \
@@ -424,6 +425,7 @@ qrc_image.cpp: image.qrc \
 		images/free-icon-font-portrait-3917494.png \
 		images/h_modi3.png \
 		images/huntress-wizards-past-v0-f13b3wtzw7qb1.jpg \
+		images/exit.png \
 		images/free-icon-font-browser-3914415.png \
 		images/free-icon-font-chart-histogram-5528038.png \
 		images/free-icon-font-stop-3917629.png \
@@ -432,6 +434,7 @@ qrc_image.cpp: image.qrc \
 		images/eye.png \
 		images/free-icon-font-rotate-right-3917765.png \
 		images/free-icon-font-play-3917607.png \
+		images/power.png \
 		images/stop.png
 	/usr/lib/qt5/bin/rcc -name image image.qrc -o qrc_image.cpp
 
