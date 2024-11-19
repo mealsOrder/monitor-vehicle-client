@@ -45,16 +45,16 @@
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">Background: rgb(57, 62, 70)</string>
+       <string notr="true">background-color:  rgb(57, 62, 70);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Plain</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
         <widget class="QLabel" name="label">
          <property name="minimumSize">
           <size>
@@ -62,11 +62,82 @@
            <height>0</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame QLabel {
+    background: none;
+    color: rgb(57, 62, 70);
+}
+</string>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="pixmap">
           <pixmap resource="image.qrc">:/images/h_modi3.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exit_button">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+
+background-color: #255383;
+
+border: 2px solid #ffffff;
+border-radius: 5px;
+
+}
+
+QPushButton:hover {
+
+background-color: #3a6898;
+
+}
+
+QPushButton:pressed {
+
+background-color: #183554;
+
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="image.qrc">
+           <normaloff>:/images/power.png</normaloff>:/images/power.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -129,7 +200,7 @@
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -155,8 +226,8 @@ background-color: #183554;
          </property>
          <property name="iconSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
         </widget>
@@ -180,7 +251,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -202,7 +273,7 @@ background-color: #183554;
          </property>
          <property name="icon">
           <iconset resource="image.qrc">
-           <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
+           <normaloff>:/images/pause.png</normaloff>:/images/pause.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -231,7 +302,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -257,8 +328,8 @@ background-color: #183554;
          </property>
          <property name="iconSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
         </widget>
@@ -292,7 +363,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -337,7 +408,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -382,7 +453,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -427,7 +498,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -472,7 +543,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -540,7 +611,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -566,8 +637,8 @@ background-color: #183554;
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
           </widget>
@@ -591,7 +662,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -642,7 +713,7 @@ background-color: #183554;
 
 background-color: #255383;
 
-border: 2px ridge #ffffff;
+border: 2px solid #ffffff;
 border-radius: 5px;
 
 }
@@ -668,8 +739,8 @@ background-color: #183554;
            </property>
            <property name="iconSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
           </widget>
@@ -692,7 +763,7 @@ background-color: #183554;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page"/>
          <widget class="QWidget" name="page_2"/>

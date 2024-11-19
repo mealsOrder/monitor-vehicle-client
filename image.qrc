@@ -18,5 +18,8 @@
         <file>images/rewind.png</file>
         <file>images/running.png</file>
         <file>images/stop.png</file>
+        <file>images/pause.png</file>
+        <file>images/exit.png</file>
+        <file>images/power.png</file>
     </qresource>
 </RCC>
