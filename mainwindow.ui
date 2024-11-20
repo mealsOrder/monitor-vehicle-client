@@ -593,7 +593,7 @@ background-color: #183554;
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="best_start_button">
+          <widget class="QPushButton" name="func_start_button">
            <property name="minimumSize">
             <size>
              <width>40</width>
@@ -644,7 +644,7 @@ background-color: #183554;
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="best_stop_button">
+          <widget class="QPushButton" name="func_stop_button">
            <property name="minimumSize">
             <size>
              <width>40</width>
@@ -684,7 +684,7 @@ background-color: #183554;
            </property>
            <property name="icon">
             <iconset resource="image.qrc">
-             <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
+             <normaloff>:/images/pause.png</normaloff>:/images/pause.png</iconset>
            </property>
            <property name="iconSize">
             <size>
