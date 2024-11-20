@@ -51,12 +51,13 @@ private slots:
 
     void onExitButtonClicked();
 
-    void onBestshotStartButtonClicked();
-    //void processAndSaveImages(const QByteArray &responseData,const QString& saveDirectory);
-
-    void onBestshotStopButtonClicked();
     void saveImageToFile(const QByteArray &imageData);
     void updateImageScrollArea();
+
+    void onDetectionStartButtonClicked();
+
+    void onFunctionStartButtonClicked();
+    void onFunctionStopButtonClicked();
 
 private:
     Ui::MainWindow *ui;
@@ -67,7 +68,10 @@ private:
     QScrollArea *imageScrollArea;
 
     NetworkManager *networkManager;
-    QNetworkAccessManager *networkAccessManager;
+    QNetworkAccessManager *networkAccessManager;    
+
+    enum Mode { None, Bestshot, Detection };
+    Mode currentMode = None;
 };
 #endif // MAINWINDOW_H
 
