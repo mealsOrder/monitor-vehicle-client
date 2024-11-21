@@ -10,14 +10,19 @@ class VideoThread : public QThread
     Q_OBJECT
 
 public:
-    VideoThread(QObject *parent = nullptr) : QThread(parent) {}
+    explicit VideoThread(QObject *parent = nullptr);
+    ~VideoThread();
+
+    void stopPipeline();
 
 protected:
     void run() override;
 
 signals:
     void frameCaptured(const QImage &frame);
+
+private:
+    cv::VideoCapture *cap = nullptr;
 };
 
 #endif // VIDEO_THREAD_H
-

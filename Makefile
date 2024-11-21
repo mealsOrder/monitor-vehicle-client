@@ -52,14 +52,16 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp \
+SOURCES       = gstreamer_utils.cpp \
+		main.cpp \
 		mainwindow.cpp \
 		networkmanager.cpp \
 		video_thread.cpp qrc_image.cpp \
 		moc_mainwindow.cpp \
 		moc_networkmanager.cpp \
 		moc_video_thread.cpp
-OBJECTS       = main.o \
+OBJECTS       = gstreamer_utils.o \
+		main.o \
 		mainwindow.o \
 		networkmanager.o \
 		video_thread.o \
@@ -160,9 +162,11 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		hvtech.pro mainwindow.h \
+		hvtech.pro gstreamer_utils.h \
+		mainwindow.h \
 		networkmanager.h \
-		video_thread.h main.cpp \
+		video_thread.h gstreamer_utils.cpp \
+		main.cpp \
 		mainwindow.cpp \
 		networkmanager.cpp \
 		video_thread.cpp
@@ -384,8 +388,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents image.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h networkmanager.h video_thread.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp networkmanager.cpp video_thread.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents gstreamer_utils.h mainwindow.h networkmanager.h video_thread.h $(DISTDIR)/
+	$(COPY_FILE) --parents gstreamer_utils.cpp main.cpp mainwindow.cpp networkmanager.cpp video_thread.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -484,6 +488,9 @@ compiler_lex_clean:
 compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
+
+gstreamer_utils.o: gstreamer_utils.cpp gstreamer_utils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gstreamer_utils.o gstreamer_utils.cpp
 
 main.o: main.cpp mainwindow.h \
 		video_thread.h \

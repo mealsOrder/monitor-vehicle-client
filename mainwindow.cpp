@@ -76,7 +76,25 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->func_stop_button, &QPushButton::clicked, this, &MainWindow::onFunctionStopButtonClicked);
 
 }
+MainWindow::~MainWindow()
+{
+    if (videoThread) {
+        if (videoThread->isRunning()) {
+            qDebug() << "Stopping video thread...";
+            videoThread->requestInterruption(); // 스레드 종료 요청
+            videoThread->quit();                // 스레드 종료
+            videoThread->wait();                // 스레드 종료 대기
+        }
+        delete videoThread;                     // 스레드 객체 해제
+        videoThread = nullptr;                  // NULL로 초기화
+    }
 
+    qDebug() << "Releasing resources...";
+    delete ui;
+}
+
+
+/*
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -84,6 +102,7 @@ MainWindow::~MainWindow()
     videoThread->quit();
     videoThread->wait();
 }
+*/
 
 void MainWindow::updateFrame(const QImage &frame)
 {
@@ -193,9 +212,31 @@ void MainWindow::onErrorOccurred(const QString &errorString)
     qWarning() << "Error occurred:" << errorString;  // ���� �޽��� ����
 }
 
+void MainWindow::onExitButtonClicked()
+{
+    qDebug() << "Exit button clicked. Preparing to exit...";
+
+    if (videoThread && videoThread->isRunning()) {
+        qDebug() << "Stopping video thread...";
+        videoThread->requestInterruption(); // 스레드 종료 요청
+        videoThread->quit();                // 스레드 종료
+        videoThread->wait();                // 스레드 종료 대기
+    }
+
+    qDebug() << "Releasing GStreamer pipeline...";
+    QApplication::quit(); // 애플리케이션 종료
+}
+
+
+
+/*
+
 void MainWindow::onExitButtonClicked() {
     qDebug() << "Exit button clicked.";
+	qApp->quit();
 }
+
+*/
 
 void MainWindow::saveImageToFile(const QByteArray &imageData)
 {
