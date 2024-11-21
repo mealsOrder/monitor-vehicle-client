@@ -1,41 +1,68 @@
 #include "video_thread.h"
-#include <opencv2/opencv.hpp>
+#include <QDebug>
 #include <gst/gst.h>
-#include <QThread>
-#include <QImage>
+
+VideoThread::VideoThread(QObject *parent) : QThread(parent), cap(nullptr) {}
+
+VideoThread::~VideoThread()
+{
+    stopPipeline();
+}
 
 void VideoThread::run()
 {
-    // GStreamer 파이프라인
-    std::string pipeline = "udpsrc port=5004 caps=\"application/x-rtp, payload=96\" ! "
-                           "rtpjpegdepay ! queue ! jpegdec ! queue ! "
-                           "videoconvert ! appsink";
+    try {
+        std::string pipeline = "udpsrc port=5004 caps=\"application/x-rtp, payload=96\" ! "
+                               "rtpjpegdepay ! queue ! jpegdec ! queue ! "
+                               "videoconvert ! appsink";
 
-    cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
-    if (!cap.isOpened()) {
-        std::cerr << "Error: Could not open GStreamer pipeline for receiving." << std::endl;
-        return;
-    }
-
-    cv::Mat frame;
-    while (true) {
-        // 프레임을 읽어오기
-        cap >> frame;
-        if (frame.empty()) {
-            std::cerr << "Error: Could not read frame." << std::endl;
-            break;
+        cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
+        if (!cap.isOpened()) {
+            throw std::runtime_error("Error: Could not open GStreamer pipeline.");
         }
 
-        cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+        cv::Mat frame;
+        while (!isInterruptionRequested()) {
+            if (!cap.read(frame)) {
+                qDebug() << "Error: Could not grab frame.";
+                break;
+            }
 
-        // 프레임을 QImage로 변환하여 메인 윈도우에 전달
-        QImage qimg(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
-        emit frameCaptured(qimg);
+            if (frame.empty()) {
+                qDebug() << "Error: Frame is empty.";
+                break;
+            }
 
-        // 간단한 sleep을 통해 CPU 과부하를 방지
-        QThread::msleep(30);
+            cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+
+            QImage qimg(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+            emit frameCaptured(qimg);
+
+            QThread::msleep(30);
+        }
+
+        cap.release();
+        qDebug() << "VideoThread exiting gracefully.";
+
+    } catch (const std::exception &e) {
+        qDebug() << "Exception occurred: " << e.what();
     }
-
-    cap.release();
 }
+
+
+
+void VideoThread::stopPipeline()
+{
+    if (cap) {
+        qDebug() << "Releasing GStreamer pipeline...";
+        cap->release(); // GStreamer 파이프라인 해제
+        delete cap;     // 메모리 해제
+        cap = nullptr;
+        qDebug() << "GStreamer pipeline stopped.";
+    }
+    // GStreamer 전체 시스템 종료
+    gst_deinit();
+    qDebug() << "GStreamer deinitialized.";
+}
+
 

@@ -24,12 +24,14 @@ LIBS += -L/usr/lib/aarch64-linux-gnu/gstreamer-1.0 -lgstreamer-1.0
 LIBS += -L/usr/lib/aarch64-linux-gnu -lglib-2.0
 
 SOURCES += \
+    gstreamer_utils.cpp \
     main.cpp \
     mainwindow.cpp \
     networkmanager.cpp \
     video_thread.cpp
 
 HEADERS += \
+    gstreamer_utils.h \
     mainwindow.h \
     networkmanager.h \
     video_thread.h
