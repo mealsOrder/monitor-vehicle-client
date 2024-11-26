@@ -17,8 +17,23 @@ NetworkManager::~NetworkManager()
 void NetworkManager::sendGetRequest(const QUrl &url)
 {
     QNetworkRequest request(url);
-    networkAccessManager->get(request);  // HTTP GET ��û ����
+    QNetworkReply *reply = networkAccessManager->get(request);
+
+    connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        QByteArray responseData = reply->readAll();
+        emit dataReady(responseData); // 데이터를 바로 전송
+    });
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        reply->deleteLater();
+    });
+
+    connect(reply, &QNetworkReply::errorOccurred, this, [this, reply](QNetworkReply::NetworkError code) {
+        emit errorOccurred(reply->errorString());
+        reply->deleteLater();
+    });
 }
+
 
 void NetworkManager::onReplyFinished(QNetworkReply *reply)
 {
@@ -30,3 +45,4 @@ void NetworkManager::onReplyFinished(QNetworkReply *reply)
     }
     reply->deleteLater();  // ���� ��ü ����
 }
+

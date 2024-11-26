@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QImage>
-#include "video_thread.h"  // VideoThread ÌÅ¥ÎûòÏä§ Ìó§Îçî
+#include "video_thread.h"  // VideoThread ≈¨∑°Ω∫ «Ï¥ı
 
 #include <QStackedWidget>
 #include <QPushButton>
@@ -18,60 +18,48 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-namespace Ui {
-class MainWindow;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-
+    ~MainWindow();
     void sendStartRequest();
 
-    ~MainWindow();
-
 private slots:
-    void onRequestFinished(const QByteArray &response);  // ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÕ∏ÔøΩ ÔøΩÔøΩÔøΩÔøΩ
-    void onErrorOccurred(const QString &errorString);    // ÔøΩÔøΩÔøΩÔøΩ ÔøΩﬁΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
-
     void updateFrame(const QImage &frame);
-
     void showChartPage();
     void showImagePage();
-
-    //void sendStartRequest();
-    void sendStopRequest();
-    void sendResumeRequest();
-
-    void sendNetworkRequest(const QUrl &url);
-    void sendRewindRequest();
-
-    void onExitButtonClicked();
-
-    void saveImageToFile(const QByteArray &imageData);
-    void updateImageScrollArea();
-
-    void onDetectionStartButtonClicked();
-
     void onFunctionStartButtonClicked();
     void onFunctionStopButtonClicked();
+    void sendResumeRequest();
+    void sendStopRequest();
+    void sendRewindRequest();
+    void onExitButtonClicked();
+    void onRequestFinished();
+    void onErrorOccurred(QNetworkReply::NetworkError error);
+    void onDetectionStartButtonClicked();
+    void updateImageScrollArea();
 
 private:
     Ui::MainWindow *ui;
-    VideoThread *videoThread;
-
     QStackedWidget *stackedWidget;
-    QChartView *chartView;
     QScrollArea *imageScrollArea;
-
+    QChartView *chartView;
+    QNetworkAccessManager *networkAccessManager;
+    VideoThread *videoThread;
     NetworkManager *networkManager;
-    QNetworkAccessManager *networkAccessManager;    
 
-    enum Mode { None, Bestshot, Detection };
-    Mode currentMode = None;
+    enum Mode { None, Bestshot, Detection } currentMode = None;
+
+    QByteArray buffer;
+
+    QString saveImageToFile(const QByteArray &imageData);
+    void sendNetworkRequest(const QUrl &url);
 };
-#endif // MAINWINDOW_H
 
+#endif // MAINWINDOW_H

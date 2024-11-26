@@ -1,0 +1,5 @@
+HTTP/1.0 500 Internal Server Error
+Content-Type: text/html
+Connection: keep-alive
+
+<html><head><title>InternalServerError</title></head><body><h1>500 Internal Server Error</h1></body></html>
