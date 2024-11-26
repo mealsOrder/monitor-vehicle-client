@@ -1,21 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <opencv2/opencv.hpp>
-#include <gst/gst.h>
 #include <iostream>
-
-#include <QtCharts/QChart>
-#include <QtCharts/QLineSeries>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QPixmap>
 #include <QDir>
+#include <QtCharts/QChart>
+#include <QtCharts/QLineSeries>
+#include <QNetworkReply>
+#include <QScrollArea>
 
-#include "networkmanager.h"
-#include <QNetworkRequest>
-#include <QUrl>
-#include <QDebug>
-
+#include <QtConcurrent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,19 +21,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // QLabel의 크기를 640x480으로 고정
     ui->videoLabel->setFixedSize(800, 600);
 
-    // VideoThread에서 frameCaptured 신호를 받아서 QLabel에 표시
     connect(videoThread, &VideoThread::frameCaptured, this, &MainWindow::updateFrame);
 
-    // 스레드 시작
     videoThread->start();
 
-    // QStackedWidget ���� (�����̳ʿ��� ������ stackedWidget)
     stackedWidget = ui->stackedWidget;
-
-    // ��Ʈ�� ǥ���� ������ ����
     chartView = new QChartView(new QChart());
     chartView->chart()->setTitle("Sample Chart");
     QLineSeries *series = new QLineSeries();
@@ -50,208 +39,48 @@ MainWindow::MainWindow(QWidget *parent)
     chartView->chart()->addSeries(series);
     chartView->chart()->createDefaultAxes();
 
-    // �̹��� ����Ʈ�� ǥ���� ������ ����
     imageScrollArea = new QScrollArea();
+    stackedWidget->addWidget(chartView);
+    stackedWidget->addWidget(imageScrollArea);
 
-    // QStackedWidget�� ������ �߰�
-    stackedWidget->addWidget(chartView);        // ù ��° ������
-    stackedWidget->addWidget(imageScrollArea);  // �� ��° ������
-
-    // ��ư�� ������ ��ȯ ����
     connect(ui->graph_button, &QPushButton::clicked, this, &MainWindow::showChartPage);
     connect(ui->bestshot_button, &QPushButton::clicked, this, &MainWindow::showImagePage);
-
     connect(ui->video_start_button, &QPushButton::clicked, this, &MainWindow::sendResumeRequest);
     connect(ui->video_stop_button, &QPushButton::clicked, this, &MainWindow::sendStopRequest);
     connect(ui->video_resume_button, &QPushButton::clicked, this, &MainWindow::sendRewindRequest);
-
-    connect(networkManager, &NetworkManager::requestFinished, this, &MainWindow::onRequestFinished);
-    connect(networkManager, &NetworkManager::errorOccurred, this, &MainWindow::onErrorOccurred);
-
     connect(ui->exit_button, &QPushButton::clicked, this, &MainWindow::onExitButtonClicked);
-
     connect(ui->detection_button, &QPushButton::clicked, this, &MainWindow::onDetectionStartButtonClicked);
-
     connect(ui->func_start_button, &QPushButton::clicked, this, &MainWindow::onFunctionStartButtonClicked);
     connect(ui->func_stop_button, &QPushButton::clicked, this, &MainWindow::onFunctionStopButtonClicked);
-
 }
+
 MainWindow::~MainWindow()
 {
-    if (videoThread) {
-        if (videoThread->isRunning()) {
-            qDebug() << "Stopping video thread...";
-            videoThread->requestInterruption(); // 스레드 종료 요청
-            videoThread->quit();                // 스레드 종료
-            videoThread->wait();                // 스레드 종료 대기
-        }
-        delete videoThread;                     // 스레드 객체 해제
-        videoThread = nullptr;                  // NULL로 초기화
+    if (videoThread && videoThread->isRunning()) {
+        videoThread->requestInterruption();
+        videoThread->quit();
+        videoThread->wait();
     }
-
-    qDebug() << "Releasing resources...";
+    delete videoThread;
     delete ui;
 }
-
-
-/*
-MainWindow::~MainWindow()
-{
-    delete ui;
-
-    videoThread->quit();
-    videoThread->wait();
-}
-*/
 
 void MainWindow::updateFrame(const QImage &frame)
 {
-    // QImage로 받은 프레임을 640x480 크기로 리사이즈
     QImage resizedFrame = frame.scaled(800, 600, Qt::KeepAspectRatio);
-
-    // QLabel에 리사이즈된 프레임 표시
     ui->videoLabel->setPixmap(QPixmap::fromImage(resizedFrame));
 }
 
-void MainWindow::showChartPage()
+QString MainWindow::saveImageToFile(const QByteArray &imageData)
 {
-    stackedWidget->setCurrentWidget(chartView);
-}
-
-void MainWindow::showImagePage()
-{
-    currentMode = Bestshot;
-    qDebug() << "Mode switched to Bestshot.";
-
-    QString directoryPath = QDir::currentPath() + "/bestshot_images";
-    QDir directory(directoryPath);
-    QStringList imageFiles = directory.entryList(QStringList() << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp", QDir::Files);
-
-    QWidget *containerWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(containerWidget);
-
-    for (const QString &fileName : imageFiles) {
-        QString imagePath = directoryPath + "/" + fileName;
-
-        QLabel *imageLabel = new QLabel();
-        QPixmap pixmap(imagePath);
-        if (!pixmap.isNull()) {
-            imageLabel->setPixmap(pixmap.scaled(200, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-            QFileInfo fileInfo(fileName);
-            QString baseName = fileInfo.baseName();
-
-            QLabel *nameLabel = new QLabel(baseName);
-            nameLabel->setAlignment(Qt::AlignCenter);
-            nameLabel->setStyleSheet("color: white; font-size: 14px;");
-
-            QVBoxLayout *imageLayout = new QVBoxLayout();
-            imageLayout->addWidget(imageLabel);
-            imageLayout->addWidget(nameLabel);
-
-            QWidget *imageContainer = new QWidget();
-            imageContainer->setLayout(imageLayout);
-            layout->addWidget(imageContainer);
-        } else {
-            qWarning() << "Failed to load image:" << imagePath;
-        }
-    }
-
-    containerWidget->setLayout(layout);
-    imageScrollArea->setWidget(containerWidget);
-
-    updateImageScrollArea();
-
-    stackedWidget->setCurrentWidget(imageScrollArea);
-
-}
-
-void MainWindow::sendStartRequest()
-{
-    QUrl url("http://192.168.10.121:8080/start_stream");  // START ��û URL
-    qDebug() << "Sending START request to:" << url.toString();
-    sendNetworkRequest(url);
-}
-
-void MainWindow::sendResumeRequest()
-{
-    QUrl url("http://192.168.10.121:8080/resume_stream");  // START ��û URL
-    qDebug() << "Sending RESUME request to:" << url.toString();
-    sendNetworkRequest(url);
-}
-
-void MainWindow::sendStopRequest()
-{
-    QUrl url("http://192.168.10.121:8080/pause_stream");  // STOP ��û URL
-    qDebug() << "Sending STOP request to:" << url.toString();
-    sendNetworkRequest(url);
-}
-
-void MainWindow::sendRewindRequest()
-{
-    QUrl url("http://192.168.10.121:8080/rewind_stream");  // RESUME ��û URL
-    qDebug() << "Sending REWIND request to:" << url.toString();
-    sendNetworkRequest(url);
-}
-
-void MainWindow::sendNetworkRequest(const QUrl &url)
-{
-    QNetworkRequest request(url);
-    qDebug() << "Sending GET request to:" << url.toString();
-    //networkAccessManager->get(request);  // GET ��û
-    networkManager->sendGetRequest(url);
-}
-
-void MainWindow::onRequestFinished(const QByteArray &response)
-{
-    qDebug() << "Request successful. Response:" << response;
-}
-
-void MainWindow::onErrorOccurred(const QString &errorString)
-{
-    qWarning() << "Error occurred:" << errorString;  // ���� �޽��� ����
-}
-
-void MainWindow::onExitButtonClicked()
-{
-    qDebug() << "Exit button clicked. Preparing to exit...";
-
-    if (videoThread && videoThread->isRunning()) {
-        qDebug() << "Stopping video thread...";
-        videoThread->requestInterruption(); // 스레드 종료 요청
-        videoThread->quit();                // 스레드 종료
-        videoThread->wait();                // 스레드 종료 대기
-    }
-
-    qDebug() << "Releasing GStreamer pipeline...";
-    QApplication::quit(); // 애플리케이션 종료
-}
-
-
-
-/*
-
-void MainWindow::onExitButtonClicked() {
-    qDebug() << "Exit button clicked.";
-	qApp->quit();
-}
-
-*/
-
-void MainWindow::saveImageToFile(const QByteArray &imageData)
-{
-    // 저장할 디렉터리
     QString savePath = QCoreApplication::applicationDirPath() + "/bestshot_images";
     QDir dir(savePath);
 
-    if (!dir.exists()) {
-        if (!dir.mkpath(".")) {
-            qWarning() << "Failed to create directory:" << savePath;
-            return;
-        }
+    if (!dir.exists() && !dir.mkpath(".")) {
+        qWarning() << "Failed to create directory:" << savePath;
+        return QString();
     }
 
-    // 고유 파일 이름 생성
     static int imageIndex = 0;
     QString fileName = QString("image_%1.jpg").arg(imageIndex++, 3, 10, QChar('0'));
     QString filePath = dir.filePath(fileName);
@@ -261,12 +90,12 @@ void MainWindow::saveImageToFile(const QByteArray &imageData)
         file.write(imageData);
         file.close();
         qDebug() << "Image saved to:" << filePath;
+        return filePath;
     } else {
         qWarning() << "Failed to save image:" << filePath;
+        return QString();
     }
 }
-
-
 
 void MainWindow::updateImageScrollArea()
 {
@@ -351,89 +180,191 @@ void MainWindow::updateImageScrollArea()
 
     // 스크롤 영역 업데이트
     imageScrollArea->setWidgetResizable(true);
+
+    // 로그 확인
+    qDebug() << "ImageScrollArea updated with" << imageFiles.size() << "images.";
 }
 
-void MainWindow::onDetectionStartButtonClicked(){
-    currentMode = Detection;
-    qDebug() << "Mode switched to Detection.";
-}
 
 void MainWindow::onFunctionStartButtonClicked()
 {
-    if (currentMode == Bestshot) {
-        qDebug() << "Starting Bestshot mode...";
-        QUrl url("http://127.0.0.1:5000/start");
-        qDebug() << "Sending START request to:" << url.toString();
+    qDebug() << "Starting persistent stream...";
 
-        QNetworkRequest request(url);
-        QNetworkReply *reply = networkAccessManager->get(request);
+    QUrl url("http://192.168.10.121:8080/preprocess_detection");
+    QNetworkRequest request(url);
+    request.setRawHeader("Connection", "keep-alive"); // 연결을 유지하도록 설정
+    QNetworkReply *reply = networkAccessManager->get(request);
+    
+/*
+    connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        static QByteArray buffer; // 데이터를 누적하기 위한 버퍼
+        buffer.append(reply->readAll()); // 수신된 데이터를 버퍼에 추가
 
-        // ��Ʈ���� ������ ó��
-        connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
-            static QByteArray buffer;
-            buffer.append(reply->readAll());
+        QByteArray boundary = QByteArrayLiteral("--frame"); // 서버에서 설정한 바운더리
 
-            QByteArray boundary = QByteArrayLiteral("--frame");
-            while (buffer.contains(boundary)) {
-                int boundaryIndex = buffer.indexOf(boundary);
-                int nextBoundaryIndex = buffer.indexOf(boundary, boundaryIndex + boundary.size());
+        while (true) {
+            // 바운더리 위치 찾기
+            int boundaryIndex = buffer.indexOf(boundary);
+            if (boundaryIndex == -1) break; // 바운더리가 없으면 대기
 
-                if (nextBoundaryIndex == -1) {
-                    // �����Ͱ� ���� �� ������ ����
-                    break;
-                }
+            // 다음 바운더리 위치 찾기
+            int nextBoundaryIndex = buffer.indexOf(boundary, boundaryIndex + boundary.size());
+            if (nextBoundaryIndex == -1) break; // 다음 바운더리가 없으면 대기
 
-                // ��Ƽ��Ʈ ������ ����
-                QByteArray part = buffer.mid(boundaryIndex + boundary.size(), nextBoundaryIndex - boundaryIndex - boundary.size());
-                buffer.remove(0, nextBoundaryIndex);
+            // 바운더리 사이의 데이터 추출
+            QByteArray part = buffer.mid(boundaryIndex + boundary.size(), nextBoundaryIndex - boundaryIndex - boundary.size());
+            buffer.remove(0, nextBoundaryIndex); // 처리된 데이터 제거
 
-                // �̹��� ������ ����
-                if (part.contains("Content-Type: image/jpeg")) {
-                    int imageStart = part.indexOf("\r\n\r\n") + 4; // ���� ��
-                    if (imageStart > 3) {
-                        QByteArray imageData = part.mid(imageStart);
+            // JPEG 데이터 추출
+            if (part.contains("Content-Type: image/jpeg")) {
+                int imageStart = part.indexOf("\r\n\r\n") + 4; // 헤더를 넘어 실제 데이터 시작
+                if (imageStart > 3) {
+                    QByteArray imageData = part.mid(imageStart);
 
-                        // ���Ϸ� ����
-                        saveImageToFile(imageData);
-
-                        // UI ������Ʈ
+                    // 데이터 저장 및 UI 업데이트
+                    QString savedPath = saveImageToFile(imageData);
+                    if (!savedPath.isEmpty()) {
                         updateImageScrollArea();
                     }
                 }
             }
-        });
+        }
+    });
 
-        // ���� ó��
-        connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError code) {
-            qWarning() << "Network error:" << code;
-        });
+    connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError code) {
+        qWarning() << "Stream error occurred:" << code;
+    });
 
-        // ��Ʈ���� ���� ó��
-        connect(reply, &QNetworkReply::finished, this, [reply]() {
-            qDebug() << "Streaming finished.";
-            reply->deleteLater();
-        });
-    } else if (currentMode == Detection) {
-        qDebug() << "Starting Detection mode...";
-        sendNetworkRequest(QUrl("http://192.168.10.121:8080/start_detection"));
-    } else {
-        qWarning() << "No mode selected. Please choose a mode first.";
-    }
+    // 스트림이 끝난 경우에도 연결이 닫히지 않도록 처리
+    connect(reply, &QNetworkReply::finished, this, [reply]() {
+        qDebug() << "Stream closed by server.";
+        reply->deleteLater();
+    });
+    */
 }
 
 
-void MainWindow::onFunctionStopButtonClicked(){
-    switch (currentMode) {
-    case Bestshot:
-        qDebug() << "Stopping Bestshot mode...";
-        sendNetworkRequest(QUrl("http://127.0.0.1:5000/stop"));
-        break;
-    case Detection:
-        qDebug() << "Stopping Detection mode...";
-        sendNetworkRequest(QUrl("http://192.168.10.121:8080/pause_detection"));
-        break;
-    default:
-        qWarning() << "No mode selected. Please choose a mode first.";
-        break;
+void MainWindow::sendNetworkRequest(const QUrl &url)
+{
+    QNetworkRequest request(url);
+    networkManager->sendGetRequest(url);
+}
+
+void MainWindow::onDetectionStartButtonClicked()
+{
+    currentMode = Detection;
+    qDebug() << "Mode switched to Detection.";
+}
+
+void MainWindow::onFunctionStopButtonClicked()
+{
+    if (currentMode == Bestshot) {
+        sendNetworkRequest(QUrl("http://192.168.10.121:8080/preprocess_detection"));
+    } else if (currentMode == Detection) {
+        sendNetworkRequest(QUrl("http://192.168.10.121:8080/preprocess_detection"));
     }
+}
+
+void MainWindow::onExitButtonClicked()
+{
+    if (videoThread && videoThread->isRunning()) {
+        videoThread->requestInterruption();
+        videoThread->quit();
+        videoThread->wait();
+    }
+    QApplication::quit();
+}
+
+void MainWindow::showImagePage()
+{
+    currentMode = Bestshot;
+    qDebug() << "Mode switched to Bestshot.";
+
+    updateImageScrollArea(); // 이미지를 로드하고 UI를 업데이트합니다.
+
+    stackedWidget->setCurrentWidget(imageScrollArea); // 스크롤 영역을 현재 위젯으로 설정
+}
+
+void MainWindow::showChartPage()
+{
+    if (chartView) {
+        stackedWidget->setCurrentWidget(chartView); // 차트 페이지를 활성화
+        qDebug() << "Chart page displayed.";
+    } else {
+        qWarning() << "Chart view is not initialized.";
+    }
+}
+
+void MainWindow::sendStartRequest()
+{
+    //sendNetworkRequest(QUrl("http://192.168.10.121:8080/start_stream"));
+        QUrl streamUrl("http://192.168.10.121:8080/start_stream");
+    QNetworkRequest request(streamUrl);
+    QNetworkReply *reply = networkAccessManager->get(request);
+
+    connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        QByteArray imageData = reply->readAll(); // 수신된 데이터를 읽음
+
+        if (!imageData.isEmpty()) {
+            // 데이터를 이미지 파일로 저장
+            QString savedPath = saveImageToFile(imageData);
+
+            if (!savedPath.isEmpty()) {
+                // UI를 업데이트
+                updateImageScrollArea();
+            }
+        }
+    });
+
+    // 요청 완료 시 처리
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            qDebug() << "Image stream completed successfully.";
+        } else {
+            qWarning() << "Stream error:" << reply->errorString();
+        }
+
+        reply->deleteLater();
+    });
+}
+
+void MainWindow::sendResumeRequest()
+{
+    sendNetworkRequest(QUrl("http://192.168.10.121:8080/resume_stream"));
+}
+
+void MainWindow::sendStopRequest()
+{
+    sendNetworkRequest(QUrl("http://192.168.10.121:8080/pause_stream"));
+}
+
+void MainWindow::sendRewindRequest()
+{
+    sendNetworkRequest(QUrl("http://192.168.10.121:8080/rewind_stream"));
+}
+
+void MainWindow::onRequestFinished()
+{
+    // sender()를 사용하여 QNetworkReply 가져오기
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+    if (!reply) {
+        qWarning() << "Reply is null";
+        return;
+    }
+
+    QByteArray response = reply->readAll();
+    qDebug() << "Request finished with response:" << response.left(100); // 응답 로그 확인
+    reply->deleteLater(); // 응답 객체 해제
+}
+
+void MainWindow::onErrorOccurred(QNetworkReply::NetworkError error)
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+    if (!reply) {
+        qWarning() << "Reply is null on error";
+        return;
+    }
+
+    qWarning() << "Network Error occurred:" << error;
+    reply->deleteLater(); // 응답 객체 해제
 }

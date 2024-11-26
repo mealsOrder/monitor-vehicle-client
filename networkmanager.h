@@ -15,10 +15,12 @@ public:
     ~NetworkManager();
 
     void sendGetRequest(const QUrl &url);
+    void sendStreamRequest(const QUrl &url);
 
 signals:
     void requestFinished(const QByteArray &responseData);  // ���� �����͸� ����
     void errorOccurred(const QString &errorString);
+    void dataReady(const QByteArray &data);    
 
 private slots:
     void onReplyFinished(QNetworkReply *reply);
