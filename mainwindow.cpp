@@ -71,8 +71,12 @@ void MainWindow::updateFrame(const QImage &frame)
     ui->videoLabel->setPixmap(QPixmap::fromImage(resizedFrame));
 }
 
-QString MainWindow::saveImageToFile(const QByteArray &imageData)
-{
+QString MainWindow::saveImageToFile(const QByteArray &imageData) {
+    if (!imageData.startsWith("\xFF\xD8") || !imageData.endsWith("\xFF\xD9")) {
+        qWarning() << "Invalid JPEG data received.";
+        return QString();
+    }
+
     QString savePath = QCoreApplication::applicationDirPath() + "/bestshot_images";
     QDir dir(savePath);
 
@@ -96,6 +100,7 @@ QString MainWindow::saveImageToFile(const QByteArray &imageData)
         return QString();
     }
 }
+
 
 void MainWindow::updateImageScrollArea()
 {
@@ -295,38 +300,58 @@ void MainWindow::showChartPage()
     }
 }
 
-void MainWindow::sendStartRequest()
-{
-    //sendNetworkRequest(QUrl("http://192.168.10.121:8080/start_stream"));
-        QUrl streamUrl("http://192.168.10.121:8080/start_stream");
+void MainWindow::sendStartRequest() {
+    QUrl streamUrl("http://192.168.10.121:8080/start_stream");
     QNetworkRequest request(streamUrl);
     QNetworkReply *reply = networkAccessManager->get(request);
 
+    // 데이터 조립용 버퍼
+    static QByteArray buffer;
+    static bool imageStarted = false;
+
     connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
-        QByteArray imageData = reply->readAll(); // 수신된 데이터를 읽음
+        // 데이터를 누적
+        buffer.append(reply->readAll());
 
-        if (!imageData.isEmpty()) {
-            // 데이터를 이미지 파일로 저장
-            QString savedPath = saveImageToFile(imageData);
+        while (true) {
+            if (!imageStarted) {
+                // JPEG 시작 마커(FD8)를 찾음
+                int startIdx = buffer.indexOf("\xFF\xD8");
+                if (startIdx != -1) {
+                    imageStarted = true;
+                    buffer.remove(0, startIdx);  // 시작 마커 이전 데이터 제거
+                } else {
+                    break; // 시작 마커를 기다림
+                }
+            }
 
-            if (!savedPath.isEmpty()) {
-                // UI를 업데이트
-                updateImageScrollArea();
+            // JPEG 종료 마커(FD9)를 찾음
+            int endIdx = buffer.indexOf("\xFF\xD9");
+            if (imageStarted && endIdx != -1) {
+                QByteArray imageData = buffer.left(endIdx + 2);  // FFD9 포함하여 추출
+                buffer.remove(0, endIdx + 2);                   // 조립된 데이터 제거
+
+                imageStarted = false;  // 다음 이미지를 위해 초기화
+
+                // 이미지를 파일로 저장 및 UI 업데이트
+                QString savedPath = saveImageToFile(imageData);
+                if (!savedPath.isEmpty()) {
+                    updateImageScrollArea();
+                }
+            } else {
+                break; // 데이터가 부족하면 대기
             }
         }
     });
 
-    // 요청 완료 시 처리
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        if (reply->error() == QNetworkReply::NoError) {
-            qDebug() << "Image stream completed successfully.";
-        } else {
+        if (reply->error() != QNetworkReply::NoError) {
             qWarning() << "Stream error:" << reply->errorString();
         }
-
         reply->deleteLater();
     });
 }
+
 
 void MainWindow::sendResumeRequest()
 {
