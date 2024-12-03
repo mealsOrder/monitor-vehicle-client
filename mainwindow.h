@@ -30,6 +30,9 @@ public:
     ~MainWindow();
     void sendStartRequest();
 
+signals:
+    void imageLoaded(const QString &imagePath);
+
 private slots:
     void updateFrame(const QImage &frame);
     void showChartPage();
@@ -44,6 +47,9 @@ private slots:
     void onErrorOccurred(QNetworkReply::NetworkError error);
     void onDetectionStartButtonClicked();
     void updateImageScrollArea();
+    
+    void processParsedXML(const QString &description, const QString &timestamp);
+    void addImageToScrollArea(const QString &imagePath);
 
 private:
     Ui::MainWindow *ui;

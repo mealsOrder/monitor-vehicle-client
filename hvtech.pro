@@ -1,4 +1,4 @@
-QT       += core gui charts network concurrent
+QT       += core gui charts network concurrent xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
