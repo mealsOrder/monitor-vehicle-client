@@ -158,7 +158,7 @@ int main() {
     graph.addEdge(4, 6, 1); // 4 -> 6 거리 1
     graph.addEdge(5, 6, 5); // 5 -> 6 거리 5
 
-    // 다익스트라 실행
+    //다익스트라 실행
     vector<tuple<int, int, int>> atv;
 
     for (int i = 1; i <= vertices; i++) {
@@ -189,7 +189,7 @@ int main() {
 
     cout << '\n';
 
-    // 크루스칼 알고리즘 실행
+    //크루스칼 알고리즘 실행
     
     kruskalMn();
     cout << '\n';
