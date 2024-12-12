@@ -14,10 +14,10 @@
 
 ### Calculating MST:
 
-1. Sort the list of edges in ascending order based on weight.
-2. Use Kruskal's MST algorithm to construct the minimum spanning tree, using the union-find data structure to prevent cycles.
-3. The union function merges the sets to which two nodes belong, ensuring that the smaller tree is placed under the larger tree based on rank.
-4. The find function finds the root node of a given node, using path compression to improve efficiency.
+- Sort the list of edges in ascending order based on weight.
+- Use Kruskal's MST algorithm to construct the minimum spanning tree, using the union-find data structure to prevent cycles.
+- The union function merges the sets to which two nodes belong, ensuring that the smaller tree is placed under the larger tree based on rank.
+- The find function finds the root node of a given node, using path compression to improve efficiency.
 
 ### Constructing MSF: 
 
@@ -33,10 +33,10 @@
 
 ### Weight Calculation:
 
-1. Calculate the nodes and costs for each connected component.
-2. Sum the weights of all components and output the number of connected nodes and components.
-3. The final calculated risk is determined using logarithmic, square root, and exponential functions. The coefficients 'C' and 'G' are used in the calculation formula to derive the final risk 'R'.
-4. This code uses Kruskal's MST algorithm, an important algorithm in graph theory, to find the minimum spanning tree in an actual graph, extend it to form a minimum spanning forest, and analyze the characteristics of the graph through additional weight calculations.
+- Calculate the nodes and costs for each connected component.
+- Sum the weights of all components and output the number of connected nodes and components.
+- The final calculated risk is determined using logarithmic, square root, and exponential functions. The coefficients 'C' and 'G' are used in the calculation formula to derive the final risk 'R'.
+- This code uses Kruskal's MST algorithm, an important algorithm in graph theory, to find the minimum spanning tree in an actual graph, extend it to form a minimum spanning forest, and analyze the characteristics of the graph through additional weight calculations.
 
 ### Result:
 This approach can be applied in various fields such as network design, communication, and optimal pathfinding.
